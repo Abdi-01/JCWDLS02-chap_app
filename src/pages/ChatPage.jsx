@@ -14,7 +14,9 @@ class ChatPage extends React.Component {
 
         this.state = {
             username: '',
-            joinNotif: ''
+            joinNotif: '',
+            message: '',
+            dataChat: []
         }
     }
 
@@ -29,6 +31,11 @@ class ChatPage extends React.Component {
         socket.emit('chat', {
             username: this.state.username,
             message: ''
+        })
+
+        socket.on('chatForward', (data) => {
+            console.table(data);
+            this.setState({ dataChat: data });
         })
     }
 
@@ -55,8 +62,8 @@ class ChatPage extends React.Component {
                         <Input type='text'
                             onChange={(e) => this.setState({ message: e.target.value })} />
                         <InputGroupText className='p-0'>
-                            <Button type='button' color='success' outline 
-                            onClick={this.onSendChat}>Send</Button>
+                            <Button type='button' color='success' outline
+                                onClick={this.onSendChat}>Send</Button>
                         </InputGroupText>
                     </InputGroup>
                 </div>
