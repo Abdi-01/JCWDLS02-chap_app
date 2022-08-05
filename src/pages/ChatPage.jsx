@@ -42,8 +42,8 @@ class ChatPage extends React.Component {
     printChat = () => {
         return this.state.dataChat.map((val, idx) => {
             return <div>
-                <h6 className='fw-bold'>{val.username}</h6>
-                <span>{val.message}</span>
+                <h6 style={{ textAlign: 'right' }} className='fw-bold'>{val.username}</h6>
+                <h6 style={{ textAlign: 'right' }}>{val.message}</h6>
             </div>
         })
     }
