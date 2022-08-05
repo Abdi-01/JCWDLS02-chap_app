@@ -6,26 +6,37 @@ import {
 import io from 'socket.io-client';
 
 const API_URL = `http://localhost:4000`;
+const socket = io(API_URL);
 
 class ChatPage extends React.Component {
     constructor(props) {
         super(props);
 
         this.state = {
-            username: ''
+            username: '',
+            joinNotif: ''
         }
     }
 
     onBtConnect = () => {
-        const socket = io(API_URL);
-        socket.emit('JoinSocket', {username:this.state.username});
-        socket.on('joinNotif')
+        socket.emit('JoinSocket', { username: this.state.username });
+        socket.on('joinNotif', (data) => {
+            this.setState({ joinNotif: data })
+        })
+    }
+
+    onSendChat = () => {
+        socket.emit('chat', {
+            username: this.state.username,
+            message: ''
+        })
     }
 
     render() {
         return (
             <div className='container'>
                 <h2 className='text-center my-3'>E-Chat</h2>
+                <h4 className='text-center'>{this.state.joinNotif}</h4>
                 <FormGroup>
                     <Label>Join Name</Label>
                     <InputGroup>
@@ -36,6 +47,19 @@ class ChatPage extends React.Component {
                         </InputGroupText>
                     </InputGroup>
                 </FormGroup>
+                <div className='shadow'>
+                    <div id='print-chat' className='bg-info' style={{ height: '50vh' }}>
+
+                    </div>
+                    <InputGroup>
+                        <Input type='text'
+                            onChange={(e) => this.setState({ message: e.target.value })} />
+                        <InputGroupText className='p-0'>
+                            <Button type='button' color='success' outline 
+                            onClick={this.onSendChat}>Send</Button>
+                        </InputGroupText>
+                    </InputGroup>
+                </div>
             </div>
         )
     }
