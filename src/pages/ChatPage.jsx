@@ -30,12 +30,21 @@ class ChatPage extends React.Component {
     onSendChat = () => {
         socket.emit('chat', {
             username: this.state.username,
-            message: ''
+            message: this.state.message
         })
 
         socket.on('chatForward', (data) => {
             console.table(data);
             this.setState({ dataChat: data });
+        })
+    }
+
+    printChat = () => {
+        return this.state.dataChat.map((val, idx) => {
+            return <div>
+                <h6 className='fw-bold'>{val.username}</h6>
+                <span>{val.message}</span>
+            </div>
         })
     }
 
@@ -56,7 +65,7 @@ class ChatPage extends React.Component {
                 </FormGroup>
                 <div className='shadow'>
                     <div id='print-chat' className='bg-info' style={{ height: '50vh' }}>
-
+                        {this.printChat()}
                     </div>
                     <InputGroup>
                         <Input type='text'
